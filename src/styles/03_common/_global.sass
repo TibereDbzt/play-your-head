@@ -1,0 +1,59 @@
+html
+  font-size: 16px
+
+  @media only screen and (max-width: 600px)
+    font-size: 14px
+
+  @media only screen and (max-width: 500px)
+    font-size: 12px
+
+body
+  font-family: 'SF UI'
+  font-weight: 400
+  background-color: #F9F9FD
+
+section
+  padding-top: 10rem
+
+  @media only screen and (max-width: 700px)
+    padding-top: 6rem
+
+h1
+  font-family: 'HK Grotesk'
+  font-weight: 800
+  font-size: 2.44rem
+  color: $white
+
+h2
+  font-family: 'HK Grotesk'
+  font-size: 1.95rem
+  color: $black
+
+h3
+  font-family: 'HK Grotesk'
+  font-size: 1.56rem
+  color: $black
+
+p, li
+  font-weight: 400
+  font-size: 1rem
+  color: $black
+  line-height: 1.5rem
+  margin: 1.5rem 0
+
+a
+  color: $blue
+  text-decoration: none
+  width: fit-content
+  padding: 8px 6px
+  margin-left: -6px
+  border-radius: 3px
+  transition: all 0.2s ease
+  transition-property: background-color, color
+
+  &:hover
+    background-color: #6d74d621
+    color: #4950b3
+
+pre
+  font-family: 'Hack'

@@ -1,0 +1,25 @@
+// mixins or sass functions
+
+// wrap content inside X pixels
+@mixin section-wrapper($maxWidth, $sidesPadding) {
+  width: 100%;
+  max-width: $maxWidth;
+  padding-right: $sidesPadding;
+  padding-left: $sidesPadding;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+// align content horizontal
+@mixin flex-col-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+// align content vertical
+@mixin flex-row-center {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}

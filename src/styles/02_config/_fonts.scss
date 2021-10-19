@@ -1,0 +1,14 @@
+@font-face {
+  // font-family: '';
+  // src: url('./../assets/fonts/XXXX') format("woff2"), url('./../assets/fonts/XXXX') format("woff"); // woff or woff2
+  font-style: normal;
+  font-weight: 900;
+  font-display: swap;
+}
+
+html {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialised;
+  font-kerning: normal;
+  font-feature-settings: "kern" 1;
+}

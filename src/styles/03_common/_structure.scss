@@ -1,0 +1,19 @@
+@import '../02_config/functions';
+
+html, body {
+  width: 100%;
+}
+
+body {
+  width: 100%;
+  height: 100%;
+}
+
+main {
+  width: 100%;
+  min-height: 100vh;
+  
+  @include section-wrapper(1300px, 40px);
+  @include flex-row-center;
+  @include flex-col-center;
+}
