@@ -1,4 +1,4 @@
-const path = require('path')
+const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const PATHS = {
     scripts: path.join(__dirname, '/src/scripts'),
@@ -41,7 +41,8 @@ let config = {
     devServer: {
         client: {
             overlay: false
-        }
+        },
+        static: 'dist',
     },
 
     module: {

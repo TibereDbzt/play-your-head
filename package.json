@@ -43,5 +43,7 @@
         "webpack-dev-server": "^4.2.1"
     },
     "dependencies": {
+        "events": "^3.3.0",
+        "face-api.js": "^0.22.2"
     }
 }
