@@ -1,7 +1,7 @@
 {
-    "name": "starter web project",
-    "version": "2.0",
-    "description": "clean starter setup for frontend web project",
+    "name": "play your head",
+    "version": "1.0",
+    "description": "play music with your head and relax",
     "main": "main.js",
     "scripts": {
         "dev": "webpack serve --open --config webpack.dev.js",
