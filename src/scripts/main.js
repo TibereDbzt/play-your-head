@@ -7,7 +7,7 @@ const EventEmitter = require('events');
 const init = () => {
     const globalEmitter = new EventEmitter();
     const mainElement = document.querySelector('main');
-    new WebcamFaceRecognition(mainElement, { eventEmitter: globalEmitter });
+    new WebcamFaceRecognition(mainElement, {  eventEmitter: globalEmitter });
     new SoundManager(mainElement, { eventEmitter: globalEmitter });
 };
 
