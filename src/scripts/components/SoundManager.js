@@ -5,12 +5,13 @@ export default class SoundManager {
     constructor (el, options = {}) {
         this.el = el;
         this.options = {
+            inputsNumber: options.inputsNumber || 1,
             frequencyRange: options.frequencyRange || [50, 1300],
             gainRange: options.gainRange || [0, 1],
             ...options,
         };
 
-        this._inputs = [];
+        this._oscillators = [];
         this._isPlaying = false;
 
         this.ui = {
@@ -30,13 +31,15 @@ export default class SoundManager {
 
     _setupAudio () {
         this._audioContext = new window.AudioContext() || window.webkitAudioContext();
-        this._oscillator = this._audioContext.createOscillator();
-        this._oscillator.type = 'triangle';
         this._values = {
             gain: this._audioContext.createGain(),
         };
-        this._oscillator.connect(this._values.gain).connect(this._audioContext.destination);
-        this._oscillator.start();
+        for (let i = 0; i < this.options.inputsNumber; i++) {
+            const osc = this._audioContext.createOscillator();
+            osc.connect(this._values.gain).connect(this._audioContext.destination);
+            osc.start();
+            this._oscillators.push(osc);
+        }
     }
 
     /*
@@ -58,18 +61,24 @@ export default class SoundManager {
 
     _handleMouthAreaUpdated (mouthArea) {
         if (!this._audioContextIsRunning() || typeof mouthArea !== 'number') return;
-        // this._updateFrequency(mouthArea);
+        this._updateFrequency(this._oscillators[0], {
+            current: mouthArea,
+            min: 0,
+            max: 9000,
+        });
     }
 
     _handleDistanceLeftEyeBrowUpdated (distanceLeftEyeBrow) {
         if (!this._audioContextIsRunning() || typeof distanceLeftEyeBrow !== 'number') return;
-        this._updateFrequency(distanceLeftEyeBrow);
+        this._updateFrequency(this._oscillators[1], {
+            current: distanceLeftEyeBrow,
+            min: 21,
+            max: 38,
+        });
     }
 
-    _updateFrequency (inputValue) {
-        // this._oscillator.frequency.value = mapRangeValue(inputValue, 0, 9000, this.options.frequencyRange[0], this.options.frequencyRange[1]);
-        this._oscillator.frequency.value = mapRangeValue(inputValue, 21, 38, this.options.frequencyRange[0], this.options.frequencyRange[1]);
-        // console.log(this._oscillator.frequency.value);
+    _updateFrequency (oscillator, values) {
+        oscillator.frequency.value = mapRangeValue(values.current, values.min, values.max, this.options.frequencyRange[0], this.options.frequencyRange[1]);
     }
 
     _pause () {
