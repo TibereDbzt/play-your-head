@@ -7,11 +7,20 @@
     <title>project title</title>
 </head>
 <body>
+    <div class="loader" data-loader>
+        <button class="loader__button" data-loader-button>Loading</button>
+    </div>
     <main class="app">
-        <button data-sm-button-resume>play</button>
         <div class="webcam" data-webcam>
             <canvas class="webcam__canvas" width="720" height="560" data-webcam-canvas></canvas>
-            <video class="webcam__video" width="720" height="560" autoplay muted data-webcam-video></video>
+            <div class="webcam__videoContainer">
+                <div class="webcam__mask"></div>
+                <video class="webcam__video" width="720" height="560" autoplay muted data-webcam-video></video>
+            </div>
+        </div>
+        <div class="sound">
+            <button data-sm-button-resume>play</button>
+            <canvas class="sound__canvas" width="720" height="560" data-sm-canvas></canvas>
         </div>
     </main>
 </body>

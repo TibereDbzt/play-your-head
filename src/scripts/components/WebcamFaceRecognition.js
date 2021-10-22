@@ -22,6 +22,9 @@ export default class WebcamFaceRecognition {
             }
         };
 
+        this._isReady = false;
+        this._imageAppended = false;
+
         this.ui = {
             container: this.el,
             video: this.el.querySelector('[data-webcam-video]'),
@@ -36,21 +39,14 @@ export default class WebcamFaceRecognition {
             faceAPI.nets.tinyFaceDetector.loadFromUri('./assets/models'),
             faceAPI.nets.faceLandmark68Net.loadFromUri('./assets/models'),
         ]).then(() => this._setupWebcam());
-        this._setupElements();
         this._setupListeners();
-    }
-
-    /*
-      Sets default elements states, styles, attributes, etc.
-    */
-    _setupElements () {
     }
 
     /*
       Sets events listeners
     */
     _setupListeners () {
-        this.ui.video.addEventListener('play', () => this._setupCanvas());
+        this.ui.video.addEventListener('play', () => this._detectFace());
         this._eventEmitter.on('mouthAreaCalculated', mouthArea => this._handleMouthAreaCalculated(mouthArea));
         this._eventEmitter.on('distanceLeftEyeBrowCalculated', distanceLeftEyeBrow => this._handleDistanceLeftEyeBrowCalculated(distanceLeftEyeBrow));
     }
@@ -65,6 +61,16 @@ export default class WebcamFaceRecognition {
         if (typeof distanceLeftEyeBrow !== 'number') return;
         this._faceLandMarks.leftEyeBrown.distance = distanceLeftEyeBrow;
         this._eventEmitter.emit('distanceLeftEyeBrowUpdated', this._faceLandMarks.leftEyeBrown.distance);
+        this._eventEmitter.on('maxGain', () => this._takeScreenshot());
+    }
+
+    _takeScreenshot () {
+        if (this._imageAppended) return;
+        const imageUri = this.ui.canvas.toDataURL();
+        const image = document.createElement('image');
+        image.src = imageUri;
+        this.ui.container.append(image);
+        // console.log(imageUri);
     }
 
     _setupWebcam () {
@@ -75,17 +81,14 @@ export default class WebcamFaceRecognition {
         );
     }
 
-    _setupCanvas () {
-        // this.ui.canvas = faceAPI.createCanvasFromMedia(this.ui.video);
-        // this.ui.container.append(this.ui.canvas);
-
-        this._detectFace();
-    }
-
     _detectFace () {
         faceAPI.detectSingleFace(this.ui.video, new faceAPI.TinyFaceDetectorOptions())
             .withFaceLandmarks()
             .then(response => {
+                if (!this._isReady) {
+                    this._isReady = true;
+                    this._eventEmitter.emit('faceRecognitionReady');
+                }
                 if (!response || !response.landmarks) return;
                 this._fullFaceDescriptions = response;
                 this._draw();
@@ -117,7 +120,6 @@ export default class WebcamFaceRecognition {
             .getContext('2d')
             .clearRect(0, 0, displaySize.width, displaySize.height);
 
-        faceAPI.draw.drawDetections(this.ui.canvas, resizeDetection);
         faceAPI.draw.drawFaceLandmarks(this.ui.canvas, resizeDetection);
     }
 
@@ -129,10 +131,6 @@ export default class WebcamFaceRecognition {
         const eyeBrowAverageY = eyeBrowCoordsY.reduce((a, b) => a + b) / eyeBrowCoordsY.length;
         const eyeAverageY = eyeCoordsY.reduce((a, b) => a + b) / eyeCoordsY.length;
         return eyeAverageY - eyeBrowAverageY;
-    }
-
-    getAreaOf (faceLandmark) {
-        // return this._faceLandMarksAreas[faceLandmark] || null;
     }
 
 }
